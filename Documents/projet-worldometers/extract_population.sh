@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Mettre à jour le fichier HTML
+python scraper.py
+
 # Fichier source
 file="world_population.html"
 
@@ -12,9 +15,12 @@ million=$(echo "$section" | ggrep -oP '(?<=<span class="rts-nr-int rts-nr-10e6">
 thousand=$(echo "$section" | ggrep -oP '(?<=<span class="rts-nr-int rts-nr-10e3">)[0-9]+' | head -n 1)
 unit=$(echo "$section" | ggrep -oP '(?<=<span class="rts-nr-int rts-nr-10e0">)[0-9]+' | head -n 1)
 
-# On assemble tout ça pour obtenir la population totale
-population="${billion}${million}${thousand}${unit}"
+# On calcule la population totale
+population=$((billion * 1000000000 + million * 1000000 + thousand * 1000 + unit))
 
 # On affiche le résultat
-echo "Current World Population: $population"
+timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+echo "Population at $timestamp: $population"
+
+echo "$timestamp,$population" >> population_data.csv
 
