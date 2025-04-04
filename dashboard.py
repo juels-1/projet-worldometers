@@ -1,4 +1,4 @@
-[12:20, 04/04/2025] Maxime Riad: import dash
+import dash
 from dash import html
 import re
 
