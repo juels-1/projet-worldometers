@@ -1,30 +1,25 @@
 import dash
 from dash import html
-import re
+import subprocess
 
-# Crée l'application Dash
+# Exécuter le script extract_population.sh et récupérer la sortie
+try:
+    result = subprocess.run(['bash', 'extract_population.sh'], capture_output=True, text=True, check=True)
+    population = result.stdout.strip()
+except subprocess.CalledProcessError:
+    population = "Erreur lors de l'extraction"
+
+# Créer l'application Dash
 app = dash.Dash(__name__)
 
-# Lis le fichier HTML récupéré avec Selenium
-with open("world_population.html", "r", encoding="utf-8") as file:
-    html_content = file.read()
-
-# Utilise une regex pour extraire la population actuelle
-match = re.search(r'Current World Population.*?<span class="rts-counter" rel="current_population">([\d,]+)', html_content)
-
-# Si une correspondance est trouvée, on récupère le nombre, sinon on affiche un message d'erreur
-if match:
-    population = match.group(1)
-else:
-    population = "Donnée non trouvée"
-
-# Crée le layout du dashboard
+# Définir la mise en page de l'application
 app.layout = html.Div(children=[
     html.H1(children='Dashboard World Population'),
-    html.P(children=f'Population actuelle : {population}')
+
+    html.Div(children=f'{population}')
 ])
 
-# Lance l'application Dash
+# Lancer le serveur
 if __name__ == '__main__':
     app.run(debug=True)
 
