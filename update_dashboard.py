@@ -72,7 +72,7 @@ app.layout = html.Div(children=[
         }
     ),
 
-    # Tableau de rapport quotidien avec les nouvelles colonnes, modifié pour inverser l'ordre
+    # Tableau de rapport quotidien
     dash_table.DataTable(
         id='daily-report-table',
         columns=[{"name": i, "id": i} for i in daily_stats.columns],
